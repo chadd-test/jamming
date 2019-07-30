@@ -1,31 +1,31 @@
 import React from 'react';
 
 class Track extends React.Component {
-    renderAction () {
-        const status;
-        const trackStyle;
+        /*    renderAction () {
+        const status = '';
+        const trackStyle = '';
             
         if (isRemoval) {
             status = '-';
-            trackStyle = '';
         } else {
             status = '+';
             trackStyle = 'Track-action';
         }
-    }
+    } */
 
     render () {
         return (
+
         <div className="Track">
           <div className="Track-information">
-            <h3>Track Name<h3>
-            <p>Track Artist | Track Album <p>
-          </div>
-          <button className={this.trackStyle}>{this.status}<button>
+            <h3>Track: {this.props.track.name}</h3>
+            <p>{this.props.track.artist} | {this.props.track.album}</p> </div>
+          <button className={this.trackStyle}> {this.status} </button>
         </div>
-            );
+
+            )
         
-            }
+    }
 
 }
 
