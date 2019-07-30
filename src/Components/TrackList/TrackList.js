@@ -9,7 +9,7 @@ class TrackList extends React.Component {
             <div className="TrackList">
 
             {tracks.map((track,index) =>
-                    <Track key={track.id} track={this.props.tracks[index]} />
+                    <Track onAdd={this.props.onAdd} onRemove={this.props.onRemove} isRemoval={this.props.isRemoval} key={track.id} track={this.props.tracks[index]} />
             )}
                         
             </div>
