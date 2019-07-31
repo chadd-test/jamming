@@ -1,56 +1,65 @@
 import React from 'react';
+import './Track.css';
 
 class Track extends React.Component {
     constructor(props) {
         super(props);
         this.renderAction = this.renderAction.bind(this);
         this.handleClick = this.handleClick.bind(this);
+        this.handleClass = this.handleClass.bind(this);
         this.addTrack = this.addTrack.bind(this);
-        this.removeTrack = this.removeTrack.bind(this);
-        this.removeTrack = this.removeTrack.bind(this); }
+        this.removeTrack = this.removeTrack.bind(this); 
+    }
 
-    renderAction () {
-        const isRemoval = this.props.isRemoval;
-        let status = '';
-        let trackStyle = '';
-            
-        if (isRemoval) {
-            status = '-';
+    renderAction (isRemoval) {
+        if (isRemoval === 'true') {
+            return '-';
         } else {
-            status = '+';
-            trackStyle = 'Track-action';
+            return '+';
         }
     }
 
     addTrack() {
-        const track = this.props.track;
-        this.props.onAdd(track);
+        this.props.onAdd(this.props.track);
     }
     
     removeTrack() {
-        const track = this.props.track;
-        this.props.onRemove(track);
-    }
+        this.props.onRemove(this.props.track);
+    } 
 
-    handleClick () {
-        const isRemoval = this.props.isRemoval;
-        if (isRemoval) {
+    handleClick (isRemoval) {
+        if (isRemoval === 'true') {
            this.removeTrack();
         } else {
-            this.addTrack();
+            this.addTrack(); }
+    }
+    
+    handleClass (isRemoval) {
+        if (isRemoval === 'true') {
+            return;
+        } else {
+            return 'Track-action';
         }
     }
 
     render () {
+        const classResult = this.handleClass(this.props.isRemoval);
+
         return (
 
         <div className="Track">
           <div className="Track-information">
+            
             <h3>{this.props.track.name}</h3>
             <p>{this.props.track.artist} | {this.props.track.album}</p> 
-         </div>
-          <button className={this.renderAction.trackStyle} onClick={this.handleClick}> {this.renderAction.status} </button>
-        </div>
+                
+          </div>
+         
+            <button className={classResult} onClick={this.handleClick(this.props.isRemoval)}> 
+
+                {this.renderAction(this.props.isRemoval)} 
+
+            </button> </div>
 
             )
         
