@@ -15,13 +15,15 @@ class Playlist extends React.Component {
 
     render () {
         return (
-            <div className="Playlist">
-              <input onChange={this.handleNameChange} value='New Playlist'/>
-              <TrackList onRemove={this.props.onRemove} isRemoval='true' tracks={this.props.playlistTracks}/>
-              <button onClick={this.props.onSave} className="Playlist-save">
-                SAVE TO SPOTIFY
-              </button>
-            </div>); 
+    <div className="Playlist">
+        <input onChange={this.handleNameChange} placeholder='New Playlist'/>
+                <TrackList onRemove={this.props.onRemove} isRemoval='true' tracks={this.props.playlistTracks}/> 
+       
+        <button onClick={this.props.onSave} className="Playlist-save">
+            SAVE TO SPOTIFY
+        </button>
+    </div>
+            ); 
     }
 
 }

@@ -3,25 +3,17 @@ import './App.css';
 import SearchBar from '../SearchBar/SearchBar';
 import SearchResults from '../SearchResults/SearchResults';
 import Playlist from '../Playlist/Playlist';
+import Spotify from '../../util/Spotify';
+
+Spotify.getAccessToken();
 
 class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-                searchResult: 
-                        [{  name: 'Search Results Name 001', 
-                            artist: 'Search Results Artist',
-                            album: 'Search Results Album',
-                            id: '0000001' 
-                        }],
-                playlistName: 'Test Playlist Name',
-                playlistTracks: 
-                       [{   name: 'Playlist Track 001', 
-                            artist: 'Playlist Artist',
-                            album: 'Playlist Album',
-                            id: '000002',
-                            uri: ''
-                       }]
+                searchResult: [],
+                playlistName: 'New Playlist',
+                playlistTracks:[]
                 };
         this.addTrack = this.addTrack.bind(this);
         this.removeTrack = this.removeTrack.bind(this);
@@ -34,15 +26,25 @@ class App extends React.Component {
        if (this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id)) {
                 return;
         } else {
-                this.state.playlistTracks.push(track);
-        }
+                const updatePlaylist = this.state.playlistTracks.concat(track);
+                this.setState({
+                        playlistTracks: updatePlaylist 
+                });
+        } 
     }
 
     removeTrack (track) {
-        const trackToRemove = this.state.playlistTracks.find(savedTrack => savedTrack.id === track.id);
-        const position = this.state.playlistTracks.indexOf(trackToRemove);
-        this.state.playlistTracks.splice(position, 1);
+        const updatePlaylist = this.state.playlistTracks.filter(savedTrack => {
+            if(!(savedTrack.id === track.id)) {
+                return savedTrack;
+            } else {
+            return null;
+            }
+        });
 
+        this.setState({
+                playlistTracks: updatePlaylist
+        });
     }
 
     updatePlaylistName (name) {
@@ -53,26 +55,46 @@ class App extends React.Component {
 
     savePlaylist () {
         const trackURIs = [];
+        let playlistName = this.state.playlistName;
+
         this.state.playlistTracks.map(track =>
              trackURIs.push(track.uri)
-        ) 
+        );
+    
+        Spotify.savePlaylist(`'${playlistName}'`, trackURIs) 
+        
+        this.setState({
+                playlistName: 'New Playlist',
+                playlistTrack: []
+            })
+            
     }
 
     search (searchTerm) {
-       console.log(searchTerm); 
-    }
+        Spotify.search(searchTerm)
+            .then(updateSearch =>
+                this.setState({
+                        searchResult: updateSearch
+                })
+            );
+    } 
 
     render() {
+
         return (
         <div>
           <h1>Ja<span className="highlight">mmm</span>ing</h1>
           <div className="App">
-               <SearchBar onSearch={this.search}/> <div className="App-playlist">
-                    <SearchResults onAdd={this.addTrack} searchResults={this.state.searchResult}/>
+         
+<SearchBar onSearch={this.search}/> 
                 
-                    <Playlist onRemove={this.removeTrack} onNameChange={this.updatePlaylistName} playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks}/> 
-                </div>
-         </div>
+                <div className="App-playlist">
+
+<SearchResults onAdd={this.addTrack} searchResults={this.state.searchResult}/>
+                
+<Playlist onSave={this.savePlaylist} onRemove={this.removeTrack} onNameChange={this.updatePlaylistName} playlistName={this.state.playlistName} playlistTracks={this.state.playlistTracks}/> 
+           </div>
+          </div>
         </div>
         );
     }
