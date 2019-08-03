@@ -1,7 +1,7 @@
 /* Spotify Search */
 let accessToken = undefined;
 let expiresIn = undefined;
-const clientID = '681d13c710284a338877e93e0c36aa3a';
+const clientID = 'REMOVED';
 const redirectURL = 'http://localhost:3000/';
 const authorizeURL = `https://accounts.spotify.com/authorize?client_id=${clientID}&response_type=token&scope=playlist-modify-public&redirect_uri=${redirectURL}`;
 
